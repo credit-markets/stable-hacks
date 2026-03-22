@@ -162,10 +162,9 @@ Every hackathon prerequisite is addressed:
 
 ```
 stable-hacks/
-├── app/                    # Frontend — Next.js 15 (submodule)
-├── backend/                # Backend — NestJS 11 (submodule)
-├── programs/
-│   └── svs-11/             # SVS-11 CreditVault — Anchor program (submodule)
+├── app/                    # Frontend — Next.js 15
+├── backend/                # Backend — NestJS 11
+├── solana-vault-standard/  # SVS-11 CreditVault — Anchor program (submodule)
 ├── ARCHITECTURE.md         # Full technical architecture
 └── README.md
 ```
@@ -185,8 +184,8 @@ cd app && pnpm install && pnpm dev       # http://localhost:3000
 
 - [app/README.md](app/README.md) — Frontend architecture & setup
 - [backend/README.md](backend/README.md) — Backend architecture & setup
-- [programs/svs-11/README.md](programs/svs-11/README.md) — Solana Vault Standard family overview & quick start
-- [programs/svs-11/docs/SVS-11.md](programs/svs-11/docs/SVS-11.md) — SVS-11 credit vault specification
+- [solana-vault-standard/README.md](solana-vault-standard/README.md) — Solana Vault Standard family overview & quick start
+- [solana-vault-standard/docs/SVS-11.md](solana-vault-standard/docs/SVS-11.md) — SVS-11 credit vault specification
 
 ---
 

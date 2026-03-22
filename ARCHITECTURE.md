@@ -111,7 +111,7 @@ backend/src/
 ### SVS-11 Program (Anchor/Rust)
 
 ```
-programs/svs-11/src/
+solana-vault-standard/programs/svs-11/src/
 ├── lib.rs                  # 21 instruction entry points
 ├── state.rs                # CreditVault, InvestmentRequest, RedemptionRequest, FrozenAccount
 ├── instructions/           # One file per instruction group

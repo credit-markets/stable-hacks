@@ -1,0 +1,42 @@
+# Google Cloud Build configuration - Clean setup
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build',
+        '-t',
+        'us-central1-docker.pkg.dev/$PROJECT_ID/cm-backend/ina-backend:latest',
+        '.',
+      ]
+    timeout: '600s'
+
+  # Push the image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'push',
+        'us-central1-docker.pkg.dev/$PROJECT_ID/cm-backend/ina-backend:latest',
+      ]
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'ina-backend'
+      - '--image=us-central1-docker.pkg.dev/$PROJECT_ID/cm-backend/ina-backend:latest'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--memory=512Mi'
+      - '--cpu=1'
+      - '--min-instances=0'
+      - '--max-instances=3'
+      - '--port=3030'
+      - '--service-account=ina-backend-sa@$PROJECT_ID.iam.gserviceaccount.com'
+      # Update all environment variables and secrets
+      - '--update-env-vars=NODE_ENV=production'
+      - '--update-secrets=SUPABASE_URL=supabase-url:latest,SUPABASE_SERVICE_ROLE_KEY=supabase-service-role-key:latest,SOLANA_RPC_URL=solana-rpc-url:latest,SOLANA_OPERATOR_PK=solana-operator-pk:latest,AUTHORITY=authority:latest,ATTESTER=attester:latest,HELIUS_WEBHOOK_SECRET=helius-webhook-secret:latest,DYNAMIC_TOKEN=dynamic-token:latest,DYNAMIC_API=dynamic-api:latest,DYNAMIC_ENVIRONMENT_ID=dynamic-env-id:latest,RESEND_API_KEY=resend-api-key:latest,EMAIL_SENDER=email-sender:latest'
+
+timeout: '1200s'

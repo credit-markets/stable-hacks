@@ -1,0 +1,3778 @@
+{
+  "address": "Bf17gDR2JdKTWdoTWK3Va9YQtkpePRAAVxMCaokj8ZFW",
+  "metadata": {
+    "name": "svs_11",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "SVS-11: Solana Vault Standard - Credit Markets Vault with KYC attestation and oracle-only NAV pricing"
+  },
+  "instructions": [
+    {
+      "name": "approve_deposit",
+      "docs": [
+        "Manager approves a pending deposit request."
+      ],
+      "discriminator": [
+        205,
+        226,
+        50,
+        240,
+        111,
+        38,
+        140,
+        183
+      ],
+      "accounts": [
+        {
+          "name": "manager",
+          "signer": true,
+          "relations": [
+            "vault"
+          ]
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          },
+          "relations": [
+            "investment_request"
+          ]
+        },
+        {
+          "name": "investment_request",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  118,
+                  101,
+                  115,
+                  116,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  114,
+                  101,
+                  113,
+                  117,
+                  101,
+                  115,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investment_request.investor",
+                "account": "InvestmentRequest"
+              }
+            ]
+          }
+        },
+        {
+          "name": "investor"
+        },
+        {
+          "name": "nav_oracle"
+        },
+        {
+          "name": "attestation"
+        },
+        {
+          "name": "frozen_check",
+          "optional": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  111,
+                  122,
+                  101,
+                  110,
+                  95,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "clock",
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "approve_redeem",
+      "docs": [
+        "Manager approves a pending redemption request."
+      ],
+      "discriminator": [
+        201,
+        187,
+        217,
+        28,
+        57,
+        163,
+        120,
+        165
+      ],
+      "accounts": [
+        {
+          "name": "manager",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "vault"
+          ]
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          },
+          "relations": [
+            "redemption_request"
+          ]
+        },
+        {
+          "name": "redemption_request",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  100,
+                  101,
+                  109,
+                  112,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  114,
+                  101,
+                  113,
+                  117,
+                  101,
+                  115,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "redemption_request.investor",
+                "account": "RedemptionRequest"
+              }
+            ]
+          }
+        },
+        {
+          "name": "investor"
+        },
+        {
+          "name": "shares_mint",
+          "writable": true
+        },
+        {
+          "name": "redemption_escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  100,
+                  101,
+                  109,
+                  112,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  101,
+                  115,
+                  99,
+                  114,
+                  111,
+                  119
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "deposit_vault",
+          "writable": true
+        },
+        {
+          "name": "asset_mint"
+        },
+        {
+          "name": "claimable_tokens",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  108,
+                  97,
+                  105,
+                  109,
+                  97,
+                  98,
+                  108,
+                  101,
+                  95,
+                  116,
+                  111,
+                  107,
+                  101,
+                  110,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "nav_oracle"
+        },
+        {
+          "name": "attestation"
+        },
+        {
+          "name": "frozen_check",
+          "optional": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  111,
+                  122,
+                  101,
+                  110,
+                  95,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "asset_token_program"
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "clock",
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancel_deposit",
+      "docs": [
+        "Investor cancels their pending deposit request."
+      ],
+      "discriminator": [
+        207,
+        37,
+        219,
+        229,
+        183,
+        50,
+        54,
+        245
+      ],
+      "accounts": [
+        {
+          "name": "investor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          },
+          "relations": [
+            "investment_request"
+          ]
+        },
+        {
+          "name": "investment_request",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  118,
+                  101,
+                  115,
+                  116,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  114,
+                  101,
+                  113,
+                  117,
+                  101,
+                  115,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "deposit_vault",
+          "writable": true
+        },
+        {
+          "name": "investor_token_account",
+          "writable": true
+        },
+        {
+          "name": "asset_mint"
+        },
+        {
+          "name": "asset_token_program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancel_redeem",
+      "docs": [
+        "Investor cancels their pending redemption request."
+      ],
+      "discriminator": [
+        111,
+        76,
+        232,
+        50,
+        39,
+        175,
+        48,
+        242
+      ],
+      "accounts": [
+        {
+          "name": "investor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          },
+          "relations": [
+            "redemption_request"
+          ]
+        },
+        {
+          "name": "redemption_request",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  100,
+                  101,
+                  109,
+                  112,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  114,
+                  101,
+                  113,
+                  117,
+                  101,
+                  115,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "shares_mint"
+        },
+        {
+          "name": "investor_shares_account",
+          "writable": true
+        },
+        {
+          "name": "redemption_escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  100,
+                  101,
+                  109,
+                  112,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  101,
+                  115,
+                  99,
+                  114,
+                  111,
+                  119
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claim_deposit",
+      "docs": [
+        "Claim approved deposit shares."
+      ],
+      "discriminator": [
+        201,
+        106,
+        1,
+        224,
+        122,
+        144,
+        210,
+        155
+      ],
+      "accounts": [
+        {
+          "name": "investor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          },
+          "relations": [
+            "investment_request"
+          ]
+        },
+        {
+          "name": "investment_request",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  118,
+                  101,
+                  115,
+                  116,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  114,
+                  101,
+                  113,
+                  117,
+                  101,
+                  115,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "shares_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  104,
+                  97,
+                  114,
+                  101,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "investor_shares_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "investor"
+              },
+              {
+                "kind": "account",
+                "path": "token_2022_program"
+              },
+              {
+                "kind": "account",
+                "path": "shares_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claim_redeem",
+      "docs": [
+        "Claim approved redemption assets."
+      ],
+      "discriminator": [
+        125,
+        14,
+        137,
+        237,
+        160,
+        63,
+        225,
+        226
+      ],
+      "accounts": [
+        {
+          "name": "investor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          },
+          "relations": [
+            "redemption_request"
+          ]
+        },
+        {
+          "name": "redemption_request",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  100,
+                  101,
+                  109,
+                  112,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  114,
+                  101,
+                  113,
+                  117,
+                  101,
+                  115,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "asset_mint"
+        },
+        {
+          "name": "claimable_tokens",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  108,
+                  97,
+                  105,
+                  109,
+                  97,
+                  98,
+                  108,
+                  101,
+                  95,
+                  116,
+                  111,
+                  107,
+                  101,
+                  110,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "investor_token_account",
+          "writable": true
+        },
+        {
+          "name": "asset_token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "close_investment_window",
+      "docs": [
+        "Close the investment window, blocking new requests."
+      ],
+      "discriminator": [
+        246,
+        64,
+        93,
+        225,
+        230,
+        57,
+        88,
+        87
+      ],
+      "accounts": [
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "manager",
+          "signer": true,
+          "relations": [
+            "vault"
+          ]
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "draw_down",
+      "docs": [
+        "Manager draws down capital from the vault."
+      ],
+      "discriminator": [
+        145,
+        224,
+        214,
+        96,
+        203,
+        229,
+        241,
+        31
+      ],
+      "accounts": [
+        {
+          "name": "manager",
+          "signer": true,
+          "relations": [
+            "vault"
+          ]
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "deposit_vault",
+          "writable": true
+        },
+        {
+          "name": "destination",
+          "docs": [
+            "Any asset-mint account -- credit vault capital is deployed off-chain."
+          ],
+          "writable": true
+        },
+        {
+          "name": "asset_mint"
+        },
+        {
+          "name": "asset_token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "freeze_account",
+      "docs": [
+        "Freeze an investor account for compliance."
+      ],
+      "discriminator": [
+        253,
+        75,
+        82,
+        133,
+        167,
+        238,
+        43,
+        130
+      ],
+      "accounts": [
+        {
+          "name": "manager",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "vault"
+          ]
+        },
+        {
+          "name": "vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "investor"
+        },
+        {
+          "name": "frozen_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  111,
+                  122,
+                  101,
+                  110,
+                  95,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "clock",
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_pool",
+      "docs": [
+        "Initialize a new credit vault pool."
+      ],
+      "discriminator": [
+        95,
+        180,
+        10,
+        172,
+        84,
+        174,
+        232,
+        40
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "manager"
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              },
+              {
+                "kind": "arg",
+                "path": "vault_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "asset_mint"
+        },
+        {
+          "name": "shares_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  104,
+                  97,
+                  114,
+                  101,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "deposit_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "asset_token_program"
+              },
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "redemption_escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  100,
+                  101,
+                  109,
+                  112,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  101,
+                  115,
+                  99,
+                  114,
+                  111,
+                  119
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "nav_oracle"
+        },
+        {
+          "name": "oracle_program"
+        },
+        {
+          "name": "attester"
+        },
+        {
+          "name": "attestation_program"
+        },
+        {
+          "name": "asset_token_program"
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "vault_id",
+          "type": "u64"
+        },
+        {
+          "name": "minimum_investment",
+          "type": "u64"
+        },
+        {
+          "name": "max_staleness",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "open_investment_window",
+      "docs": [
+        "Open the investment window for deposit and redeem requests."
+      ],
+      "discriminator": [
+        45,
+        63,
+        217,
+        25,
+        133,
+        225,
+        166,
+        204
+      ],
+      "accounts": [
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "manager",
+          "signer": true,
+          "relations": [
+            "vault"
+          ]
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "pause",
+      "docs": [
+        "Pause the vault, halting approvals and capital movements."
+      ],
+      "discriminator": [
+        211,
+        22,
+        221,
+        251,
+        74,
+        121,
+        193,
+        47
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "reject_deposit",
+      "docs": [
+        "Manager rejects a pending deposit request."
+      ],
+      "discriminator": [
+        29,
+        130,
+        68,
+        0,
+        27,
+        121,
+        47,
+        131
+      ],
+      "accounts": [
+        {
+          "name": "manager",
+          "signer": true,
+          "relations": [
+            "vault"
+          ]
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          },
+          "relations": [
+            "investment_request"
+          ]
+        },
+        {
+          "name": "investment_request",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  118,
+                  101,
+                  115,
+                  116,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  114,
+                  101,
+                  113,
+                  117,
+                  101,
+                  115,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investment_request.investor",
+                "account": "InvestmentRequest"
+              }
+            ]
+          }
+        },
+        {
+          "name": "investor",
+          "writable": true
+        },
+        {
+          "name": "deposit_vault",
+          "writable": true
+        },
+        {
+          "name": "investor_token_account",
+          "writable": true
+        },
+        {
+          "name": "asset_mint"
+        },
+        {
+          "name": "asset_token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "reason_code",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "repay",
+      "docs": [
+        "Manager repays borrowed capital to the vault."
+      ],
+      "discriminator": [
+        234,
+        103,
+        67,
+        82,
+        208,
+        234,
+        219,
+        166
+      ],
+      "accounts": [
+        {
+          "name": "manager",
+          "signer": true,
+          "relations": [
+            "vault"
+          ]
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "manager_token_account",
+          "writable": true
+        },
+        {
+          "name": "deposit_vault",
+          "writable": true
+        },
+        {
+          "name": "asset_mint"
+        },
+        {
+          "name": "asset_token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "request_deposit",
+      "docs": [
+        "Request a deposit into the vault."
+      ],
+      "discriminator": [
+        243,
+        202,
+        197,
+        215,
+        135,
+        97,
+        213,
+        109
+      ],
+      "accounts": [
+        {
+          "name": "investor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "investment_request",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  118,
+                  101,
+                  115,
+                  116,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  114,
+                  101,
+                  113,
+                  117,
+                  101,
+                  115,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "investor_token_account",
+          "writable": true
+        },
+        {
+          "name": "deposit_vault",
+          "writable": true
+        },
+        {
+          "name": "asset_mint"
+        },
+        {
+          "name": "attestation"
+        },
+        {
+          "name": "frozen_check",
+          "optional": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  111,
+                  122,
+                  101,
+                  110,
+                  95,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "asset_token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "clock",
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "request_redeem",
+      "docs": [
+        "Request a redemption of vault shares."
+      ],
+      "discriminator": [
+        105,
+        49,
+        44,
+        38,
+        207,
+        241,
+        33,
+        173
+      ],
+      "accounts": [
+        {
+          "name": "investor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "redemption_request",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  100,
+                  101,
+                  109,
+                  112,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  114,
+                  101,
+                  113,
+                  117,
+                  101,
+                  115,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "shares_mint"
+        },
+        {
+          "name": "investor_shares_account",
+          "writable": true
+        },
+        {
+          "name": "redemption_escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  100,
+                  101,
+                  109,
+                  112,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  101,
+                  115,
+                  99,
+                  114,
+                  111,
+                  119
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "attestation"
+        },
+        {
+          "name": "frozen_check",
+          "optional": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  111,
+                  122,
+                  101,
+                  110,
+                  95,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "clock",
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "shares",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "set_manager",
+      "docs": [
+        "Set a new vault manager."
+      ],
+      "discriminator": [
+        30,
+        197,
+        171,
+        92,
+        121,
+        184,
+        151,
+        165
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "new_manager",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "transfer_authority",
+      "docs": [
+        "Transfer vault authority to a new address."
+      ],
+      "discriminator": [
+        48,
+        169,
+        76,
+        72,
+        229,
+        180,
+        55,
+        161
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "new_authority",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "unfreeze_account",
+      "docs": [
+        "Unfreeze a previously frozen investor account."
+      ],
+      "discriminator": [
+        28,
+        255,
+        156,
+        206,
+        139,
+        228,
+        5,
+        213
+      ],
+      "accounts": [
+        {
+          "name": "manager",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "vault"
+          ]
+        },
+        {
+          "name": "vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "frozen_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  111,
+                  122,
+                  101,
+                  110,
+                  95,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "frozen_account.investor",
+                "account": "FrozenAccount"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "unpause",
+      "docs": [
+        "Unpause the vault."
+      ],
+      "discriminator": [
+        169,
+        144,
+        4,
+        38,
+        10,
+        141,
+        188,
+        255
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_attester",
+      "docs": [
+        "Update the attestation configuration (attester and attestation program)."
+      ],
+      "discriminator": [
+        5,
+        101,
+        156,
+        144,
+        6,
+        71,
+        14,
+        212
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "new_attester",
+          "type": "pubkey"
+        },
+        {
+          "name": "new_attestation_program",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "update_oracle_config",
+      "docs": [
+        "Update the NAV oracle configuration."
+      ],
+      "discriminator": [
+        83,
+        16,
+        11,
+        254,
+        57,
+        99,
+        156,
+        58
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  100,
+                  105,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault.asset_mint",
+                "account": "CreditVault"
+              },
+              {
+                "kind": "account",
+                "path": "vault.vault_id",
+                "account": "CreditVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "new_oracle_program_account"
+        }
+      ],
+      "args": [
+        {
+          "name": "new_nav_oracle",
+          "type": "pubkey"
+        },
+        {
+          "name": "new_oracle_program",
+          "type": "pubkey"
+        },
+        {
+          "name": "new_max_staleness",
+          "type": "i64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "CreditVault",
+      "discriminator": [
+        143,
+        180,
+        135,
+        248,
+        84,
+        85,
+        183,
+        70
+      ]
+    },
+    {
+      "name": "FrozenAccount",
+      "discriminator": [
+        158,
+        228,
+        34,
+        188,
+        28,
+        83,
+        228,
+        244
+      ]
+    },
+    {
+      "name": "InvestmentRequest",
+      "discriminator": [
+        118,
+        211,
+        130,
+        122,
+        200,
+        241,
+        73,
+        237
+      ]
+    },
+    {
+      "name": "RedemptionRequest",
+      "discriminator": [
+        117,
+        157,
+        214,
+        214,
+        64,
+        160,
+        31,
+        58
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "AccountFrozen",
+      "discriminator": [
+        221,
+        214,
+        59,
+        29,
+        246,
+        50,
+        119,
+        206
+      ]
+    },
+    {
+      "name": "AccountUnfrozen",
+      "discriminator": [
+        143,
+        20,
+        111,
+        3,
+        103,
+        34,
+        184,
+        41
+      ]
+    },
+    {
+      "name": "AttesterUpdated",
+      "discriminator": [
+        254,
+        82,
+        98,
+        137,
+        62,
+        238,
+        35,
+        59
+      ]
+    },
+    {
+      "name": "AuthorityTransferred",
+      "discriminator": [
+        245,
+        109,
+        179,
+        54,
+        135,
+        92,
+        22,
+        64
+      ]
+    },
+    {
+      "name": "DrawDown",
+      "discriminator": [
+        240,
+        189,
+        217,
+        247,
+        153,
+        41,
+        148,
+        7
+      ]
+    },
+    {
+      "name": "InvestmentApproved",
+      "discriminator": [
+        199,
+        30,
+        97,
+        197,
+        81,
+        219,
+        178,
+        76
+      ]
+    },
+    {
+      "name": "InvestmentCancelled",
+      "discriminator": [
+        54,
+        214,
+        6,
+        37,
+        247,
+        119,
+        92,
+        14
+      ]
+    },
+    {
+      "name": "InvestmentClaimed",
+      "discriminator": [
+        236,
+        38,
+        171,
+        220,
+        212,
+        59,
+        53,
+        232
+      ]
+    },
+    {
+      "name": "InvestmentRejected",
+      "discriminator": [
+        172,
+        97,
+        10,
+        217,
+        247,
+        111,
+        151,
+        137
+      ]
+    },
+    {
+      "name": "InvestmentRequested",
+      "discriminator": [
+        153,
+        170,
+        74,
+        25,
+        47,
+        53,
+        213,
+        66
+      ]
+    },
+    {
+      "name": "ManagerChanged",
+      "discriminator": [
+        142,
+        97,
+        175,
+        220,
+        73,
+        27,
+        252,
+        56
+      ]
+    },
+    {
+      "name": "OracleConfigUpdated",
+      "discriminator": [
+        130,
+        6,
+        5,
+        137,
+        29,
+        155,
+        34,
+        68
+      ]
+    },
+    {
+      "name": "RedemptionApproved",
+      "discriminator": [
+        191,
+        217,
+        243,
+        104,
+        169,
+        53,
+        122,
+        185
+      ]
+    },
+    {
+      "name": "RedemptionCancelled",
+      "discriminator": [
+        22,
+        106,
+        118,
+        26,
+        83,
+        110,
+        71,
+        174
+      ]
+    },
+    {
+      "name": "RedemptionClaimed",
+      "discriminator": [
+        107,
+        251,
+        199,
+        213,
+        59,
+        173,
+        53,
+        189
+      ]
+    },
+    {
+      "name": "RedemptionRequested",
+      "discriminator": [
+        245,
+        155,
+        98,
+        131,
+        210,
+        25,
+        137,
+        146
+      ]
+    },
+    {
+      "name": "Repayment",
+      "discriminator": [
+        96,
+        27,
+        117,
+        14,
+        106,
+        94,
+        231,
+        43
+      ]
+    },
+    {
+      "name": "VaultInitialized",
+      "discriminator": [
+        180,
+        43,
+        207,
+        2,
+        18,
+        71,
+        3,
+        75
+      ]
+    },
+    {
+      "name": "VaultStatusChanged",
+      "discriminator": [
+        154,
+        211,
+        55,
+        218,
+        107,
+        9,
+        239,
+        215
+      ]
+    },
+    {
+      "name": "WindowClosed",
+      "discriminator": [
+        121,
+        79,
+        118,
+        86,
+        121,
+        66,
+        96,
+        11
+      ]
+    },
+    {
+      "name": "WindowOpened",
+      "discriminator": [
+        159,
+        141,
+        177,
+        171,
+        68,
+        255,
+        97,
+        133
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "ZeroAmount",
+      "msg": "Amount must be greater than zero"
+    },
+    {
+      "code": 6001,
+      "name": "VaultPaused",
+      "msg": "Vault is paused"
+    },
+    {
+      "code": 6002,
+      "name": "VaultNotPaused",
+      "msg": "Vault is not paused"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidAssetDecimals",
+      "msg": "Asset decimals must be <= 9"
+    },
+    {
+      "code": 6004,
+      "name": "MathOverflow",
+      "msg": "Arithmetic overflow"
+    },
+    {
+      "code": 6005,
+      "name": "DivisionByZero",
+      "msg": "Division by zero"
+    },
+    {
+      "code": 6006,
+      "name": "Unauthorized",
+      "msg": "Unauthorized"
+    },
+    {
+      "code": 6007,
+      "name": "DepositTooSmall",
+      "msg": "Deposit amount below minimum investment"
+    },
+    {
+      "code": 6008,
+      "name": "RequestNotPending",
+      "msg": "Request is not in pending status"
+    },
+    {
+      "code": 6009,
+      "name": "RequestNotApproved",
+      "msg": "Request is not in approved status"
+    },
+    {
+      "code": 6010,
+      "name": "InsufficientLiquidity",
+      "msg": "Insufficient liquidity in vault"
+    },
+    {
+      "code": 6011,
+      "name": "InvestmentWindowClosed",
+      "msg": "Investment window is closed"
+    },
+    {
+      "code": 6012,
+      "name": "InvalidAddress",
+      "msg": "Invalid address: cannot be the zero address"
+    },
+    {
+      "code": 6013,
+      "name": "AccountFrozen",
+      "msg": "Account is frozen"
+    },
+    {
+      "code": 6014,
+      "name": "InvalidAttestationProgram",
+      "msg": "Attestation account not owned by attestation program"
+    },
+    {
+      "code": 6015,
+      "name": "InvalidAttestation",
+      "msg": "Invalid attestation account"
+    },
+    {
+      "code": 6016,
+      "name": "InvalidAttester",
+      "msg": "Attestation issuer does not match vault attester"
+    },
+    {
+      "code": 6017,
+      "name": "AttestationRevoked",
+      "msg": "Attestation has been revoked"
+    },
+    {
+      "code": 6018,
+      "name": "AttestationExpired",
+      "msg": "Attestation has expired"
+    },
+    {
+      "code": 6019,
+      "name": "OracleStale",
+      "msg": "Oracle price data is stale"
+    },
+    {
+      "code": 6020,
+      "name": "OracleInvalidPrice",
+      "msg": "Oracle price is invalid"
+    },
+    {
+      "code": 6021,
+      "name": "OracleInvalidProgram",
+      "msg": "Oracle account owner does not match vault.oracle_program"
+    },
+    {
+      "code": 6022,
+      "name": "GlobalCapExceeded",
+      "msg": "Deposit would exceed global vault cap"
+    },
+    {
+      "code": 6023,
+      "name": "EntryFeeExceedsMax",
+      "msg": "Entry fee exceeds maximum"
+    },
+    {
+      "code": 6024,
+      "name": "LockDurationExceedsMax",
+      "msg": "Lock duration exceeds maximum"
+    },
+    {
+      "code": 6025,
+      "name": "ExitFeeExceedsMax",
+      "msg": "Exit fee exceeds maximum"
+    },
+    {
+      "code": 6026,
+      "name": "ManagementFeeExceedsMax",
+      "msg": "Management fee exceeds maximum"
+    },
+    {
+      "code": 6027,
+      "name": "PerformanceFeeExceedsMax",
+      "msg": "Performance fee exceeds maximum"
+    },
+    {
+      "code": 6028,
+      "name": "PerUserCapExceeded",
+      "msg": "Deposit would exceed per-user cap"
+    },
+    {
+      "code": 6029,
+      "name": "InvalidFeeConfig",
+      "msg": "Invalid fee configuration"
+    },
+    {
+      "code": 6030,
+      "name": "InvalidCapConfig",
+      "msg": "Invalid cap configuration"
+    },
+    {
+      "code": 6031,
+      "name": "InvalidLockConfig",
+      "msg": "Invalid lock configuration"
+    },
+    {
+      "code": 6032,
+      "name": "InvalidStalenessConfig",
+      "msg": "Invalid staleness configuration"
+    }
+  ],
+  "types": [
+    {
+      "name": "AccessMode",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Open"
+          },
+          {
+            "name": "Whitelist"
+          },
+          {
+            "name": "Blacklist"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AccountFrozen",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "frozen_by",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AccountUnfrozen",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "investor",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AttesterUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_attester",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_attester",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_attestation_program",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_attestation_program",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AuthorityTransferred",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "previous_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_authority",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreditVault",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "manager",
+            "type": "pubkey"
+          },
+          {
+            "name": "asset_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "shares_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "deposit_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "redemption_escrow",
+            "type": "pubkey"
+          },
+          {
+            "name": "nav_oracle",
+            "type": "pubkey"
+          },
+          {
+            "name": "oracle_program",
+            "type": "pubkey"
+          },
+          {
+            "name": "max_staleness",
+            "type": "i64"
+          },
+          {
+            "name": "attester",
+            "type": "pubkey"
+          },
+          {
+            "name": "attestation_program",
+            "type": "pubkey"
+          },
+          {
+            "name": "vault_id",
+            "type": "u64"
+          },
+          {
+            "name": "total_assets",
+            "type": "u64"
+          },
+          {
+            "name": "total_shares",
+            "type": "u64"
+          },
+          {
+            "name": "total_pending_deposits",
+            "type": "u64"
+          },
+          {
+            "name": "minimum_investment",
+            "type": "u64"
+          },
+          {
+            "name": "investment_window_open",
+            "type": "bool"
+          },
+          {
+            "name": "decimals_offset",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "redemption_escrow_bump",
+            "type": "u8"
+          },
+          {
+            "name": "paused",
+            "type": "bool"
+          },
+          {
+            "name": "_reserved",
+            "type": {
+              "array": [
+                "u8",
+                64
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "DrawDown",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "destination",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "FrozenAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "frozen_by",
+            "type": "pubkey"
+          },
+          {
+            "name": "frozen_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InvestmentApproved",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "shares",
+            "type": "u64"
+          },
+          {
+            "name": "nav",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InvestmentCancelled",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InvestmentClaimed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "shares",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InvestmentRejected",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "reason_code",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InvestmentRequest",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount_locked",
+            "type": "u64"
+          },
+          {
+            "name": "shares_claimable",
+            "type": "u64"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "RequestStatus"
+              }
+            }
+          },
+          {
+            "name": "requested_at",
+            "type": "i64"
+          },
+          {
+            "name": "fulfilled_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InvestmentRequested",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ManagerChanged",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_manager",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_manager",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OracleConfigUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_oracle",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_oracle",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_program",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_program",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_max_staleness",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RedemptionApproved",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "shares",
+            "type": "u64"
+          },
+          {
+            "name": "assets",
+            "type": "u64"
+          },
+          {
+            "name": "nav",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RedemptionCancelled",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "shares",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RedemptionClaimed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "assets",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RedemptionRequest",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "shares_locked",
+            "type": "u64"
+          },
+          {
+            "name": "assets_claimable",
+            "type": "u64"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "RequestStatus"
+              }
+            }
+          },
+          {
+            "name": "requested_at",
+            "type": "i64"
+          },
+          {
+            "name": "fulfilled_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RedemptionRequested",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "shares",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Repayment",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "new_total_assets",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RequestStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Pending"
+          },
+          {
+            "name": "Approved"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VaultInitialized",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "manager",
+            "type": "pubkey"
+          },
+          {
+            "name": "asset_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "shares_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "vault_id",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VaultStatusChanged",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "paused",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WindowClosed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WindowOpened",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "label": "build backend",
+    "command": "cd .. && cd ina-backend && go build"
+  },
+  {
+    "label": "run backend",
+    "command": "cd .. && cd ina-backend && ./ina-backend"
+  },
+  {
+    "label": "run frontend",
+    "command": "pnpm dev"
+  }
+]

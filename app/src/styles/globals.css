@@ -1,0 +1,478 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hide Dynamic Labs SDK modals visually while preserving JS functionality (custom auth UI) */
+.dynamic-shadow-dom {
+  position: fixed !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
+/* ============================================
+   DESIGN SYSTEM: Minimalistic Institutional
+   Aligned with MIGRATION_PLAN_REFINED.md
+   ============================================ */
+
+@layer base {
+  :root {
+    /* ─────────────────────────────────────────
+       Color Tokens
+       ───────────────────────────────────────── */
+
+    /* Primary Palette (90% of UI) */
+    --pure-black: #000000;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666666;
+    --text-muted: #999999;
+
+    /* Surfaces */
+    --surface-page: #fafafa;
+    --surface-card: #ffffff;
+    --surface-hover: #f5f5f5;
+    --surface-dark: #393939;
+    --surface-dark-hover: #4a4a4a;
+
+    /* Text on dark surfaces */
+    --text-inverse: #ffffff;
+    --text-inverse-muted: #a0a0a0;
+
+    /* Borders */
+    --border-subtle: #e5e5e5;
+    --border-default: #d4d4d4;
+    --border-dark: #333333;
+
+    /* Chart Colors (ONLY blue in UI) */
+    --chart-blue-500: #0066cc;
+    --chart-blue-400: #69b4ff;
+    --chart-blue-300: #91caff;
+
+    /* Terminal Status Colors */
+    --terminal-green: #00b341;
+    --terminal-amber: #cc8800;
+    --terminal-red: #cc0000;
+    --terminal-gray: #666666;
+
+    /* ─────────────────────────────────────────
+       Shadow Tokens
+       ───────────────────────────────────────── */
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04);
+    --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+    --shadow-dropdown: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --shadow-modal: 0 16px 48px rgba(0, 0, 0, 0.16);
+
+    /* ─────────────────────────────────────────
+       Typography Tokens
+       ───────────────────────────────────────── */
+    --font-body: "Inter", system-ui, -apple-system, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+
+    /* ─────────────────────────────────────────
+       Border Radius Tokens
+       ───────────────────────────────────────── */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Base Styles
+   ───────────────────────────────────────── */
+
+body {
+  font-family: var(--font-body);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--surface-page);
+  color: var(--text-primary);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Accessibility: Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Terminal Shimmer (Bloomberg data-feed aesthetic)
+   ───────────────────────────────────────── */
+
+/* Base shimmer gradient — narrow scan-line sweep with strategic-blue tint */
+.shimmer-gradient {
+  background: linear-gradient(
+    90deg,
+    var(--surface-hover) 0%,
+    var(--surface-hover) 35%,
+    rgba(121, 194, 255, 0.06) 50%,
+    var(--surface-hover) 65%,
+    var(--surface-hover) 100%
+  );
+  background-size: 200% 100%;
+}
+
+/* Dark variant for dark backgrounds (portfolio header, terminal strips) */
+.shimmer-gradient-dark {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.04) 35%,
+    rgba(121, 194, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 65%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 200% 100%;
+}
+
+/* Numerical typography: Use tabular figures for consistent column widths */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+a[role="button"].active {
+  @apply bg-white;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.ina-modal {
+  @apply m-0 rounded-b-none md:m-1 md:rounded-b-xl;
+}
+
+.prose {
+  h1 {
+    @apply text-3xl font-bold text-text-primary mb-4;
+  }
+  h2 {
+    @apply text-2xl font-semibold text-text-primary mb-3;
+  }
+  h3 {
+    @apply text-xl font-medium text-text-primary mb-3;
+  }
+  h4 {
+    @apply text-lg font-medium text-text-primary mb-2;
+  }
+  h5 {
+    @apply text-base font-medium text-text-secondary mb-2;
+  }
+  h6 {
+    @apply text-sm font-medium text-text-secondary mb-2;
+  }
+  p {
+    @apply text-base text-text-secondary mb-4;
+  }
+  a {
+    @apply text-text-primary font-medium hover:underline;
+  }
+  ul,
+  ol {
+    @apply mb-4 pl-5;
+  }
+  li {
+    @apply mb-1 text-text-secondary;
+  }
+  blockquote {
+    @apply border-l-4 border-text-primary pl-4 italic my-4;
+  }
+  code {
+    @apply bg-surface-hover px-1 py-0.5 rounded text-sm font-mono;
+  }
+  pre {
+    @apply bg-surface-hover p-4 rounded-lg my-4 overflow-auto font-mono;
+  }
+}
+
+/* Terminal Prose - Bloomberg Terminal style typography (text-sm base) */
+.terminal-prose {
+  @apply text-sm text-text-secondary leading-relaxed;
+
+  p {
+    @apply mb-3;
+  }
+  p:last-child {
+    @apply mb-0;
+  }
+  strong {
+    @apply font-semibold text-text-primary;
+  }
+  a {
+    @apply text-text-primary hover:text-text-secondary transition-colors;
+  }
+  ul,
+  ol {
+    @apply mb-3 pl-5 space-y-1;
+  }
+  li {
+    @apply text-text-secondary;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-semibold text-text-primary mb-2 mt-4 first:mt-0;
+  }
+  h1 {
+    @apply text-lg;
+  }
+  h2 {
+    @apply text-base;
+  }
+  h3,
+  h4 {
+    @apply text-sm uppercase tracking-wider;
+  }
+  blockquote {
+    @apply border-l-2 pl-3 italic my-3;
+    border-color: var(--border-subtle);
+  }
+  code {
+    @apply bg-surface-hover px-1 py-0.5 rounded text-xs font-mono;
+  }
+  pre {
+    @apply bg-surface-hover p-3 rounded my-3 overflow-auto font-mono text-xs;
+  }
+  table {
+    @apply w-full border-collapse my-3;
+  }
+  th {
+    @apply text-left text-xs uppercase tracking-wider text-text-muted pb-2;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  td {
+    @apply py-2;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+}
+
+/* ─────────────────────────────────────────
+   Mobile-First Resets
+   ───────────────────────────────────────── */
+
+/* Mobile-first resets */
+*,
+*::before,
+*::after {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent iOS zoom on input focus */
+@media screen and (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Ensure images are responsive by default */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ─────────────────────────────────────────
+   Geometric Patterns (LP Style)
+   ───────────────────────────────────────── */
+
+/* Isometric grid - chevron/diamond pattern from LP leadership section */
+.geometric-pattern,
+.isometric-grid {
+  --grid-color: 0 0% 0% / 0.03;
+  background-image: linear-gradient(
+      30deg,
+      hsl(var(--grid-color)) 12%,
+      transparent 12.5%,
+      transparent 87%,
+      hsl(var(--grid-color)) 87.5%,
+      hsl(var(--grid-color))
+    ),
+    linear-gradient(
+      150deg,
+      hsl(var(--grid-color)) 12%,
+      transparent 12.5%,
+      transparent 87%,
+      hsl(var(--grid-color)) 87.5%,
+      hsl(var(--grid-color))
+    ),
+    linear-gradient(
+      30deg,
+      hsl(var(--grid-color)) 12%,
+      transparent 12.5%,
+      transparent 87%,
+      hsl(var(--grid-color)) 87.5%,
+      hsl(var(--grid-color))
+    ),
+    linear-gradient(
+      150deg,
+      hsl(var(--grid-color)) 12%,
+      transparent 12.5%,
+      transparent 87%,
+      hsl(var(--grid-color)) 87.5%,
+      hsl(var(--grid-color))
+    );
+  background-size: 80px 140px;
+  background-position: 0 0, 0 0, 40px 70px, 40px 70px;
+}
+
+/* Dark variant - for dark backgrounds like LP Opportunity section */
+.geometric-pattern-dark,
+.isometric-grid-dark {
+  --grid-color: 0 0% 100% / 0.05;
+  background-image: linear-gradient(
+      30deg,
+      hsl(var(--grid-color)) 12%,
+      transparent 12.5%,
+      transparent 87%,
+      hsl(var(--grid-color)) 87.5%,
+      hsl(var(--grid-color))
+    ),
+    linear-gradient(
+      150deg,
+      hsl(var(--grid-color)) 12%,
+      transparent 12.5%,
+      transparent 87%,
+      hsl(var(--grid-color)) 87.5%,
+      hsl(var(--grid-color))
+    ),
+    linear-gradient(
+      30deg,
+      hsl(var(--grid-color)) 12%,
+      transparent 12.5%,
+      transparent 87%,
+      hsl(var(--grid-color)) 87.5%,
+      hsl(var(--grid-color))
+    ),
+    linear-gradient(
+      150deg,
+      hsl(var(--grid-color)) 12%,
+      transparent 12.5%,
+      transparent 87%,
+      hsl(var(--grid-color)) 87.5%,
+      hsl(var(--grid-color))
+    );
+  background-size: 80px 140px;
+  background-position: 0 0, 0 0, 40px 70px, 40px 70px;
+}
+
+/* Simple grid pattern (fallback) */
+.geometric-pattern-simple {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ─────────────────────────────────────────
+   Bloomberg Terminal Patterns
+   ───────────────────────────────────────── */
+
+/* Dot matrix - subtle data terminal feel */
+.terminal-dots {
+  background-image: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0.08) 1px,
+    transparent 1px
+  );
+  background-size: 16px 16px;
+}
+
+/* Losange/Diamond pattern - geometric Swiss precision */
+.terminal-losange {
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 6L10 8L8 10L6 8Z' fill='%23000' fill-opacity='0.05'/%3E%3C/svg%3E");
+  background-size: 16px 16px;
+}
+
+/* Herringbone V-pattern - tailored fabric aesthetic */
+.terminal-herringbone {
+  background-image: url("data:image/svg+xml,%3Csvg width='28' height='28' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 14 L14 0 L28 14' fill='none' stroke='%23000' stroke-opacity='0.05' stroke-width='0.7'/%3E%3Cpath d='M0 28 L14 14 L28 28' fill='none' stroke='%23000' stroke-opacity='0.05' stroke-width='0.7'/%3E%3C/svg%3E");
+  background-size: 28px 28px;
+}
+
+/* Header inner highlight - subtle top edge glow */
+.header-highlight {
+  position: relative;
+}
+.header-highlight::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  z-index: 1;
+}
+
+/* Fine data grid - Bloomberg spreadsheet aesthetic */
+.terminal-grid {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.015) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Subtle diagonal hatch - adds movement while staying minimal */
+.terminal-hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 40px,
+    rgba(0, 0, 0, 0.015) 40px,
+    rgba(0, 0, 0, 0.015) 41px
+  );
+}
+
+/* Gradient mesh - very subtle depth, Swiss sophistication */
+.gradient-mesh {
+  background-image: radial-gradient(
+      at 0% 0%,
+      rgba(0, 0, 0, 0.02) 0%,
+      transparent 50%
+    ), radial-gradient(at 100% 0%, rgba(0, 0, 0, 0.015) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(0, 0, 0, 0.01) 0%, transparent 50%);
+}
+
+/* Combined: dots + subtle gradient (recommended) */
+.terminal-ambient {
+  background-image: radial-gradient(
+      circle,
+      rgba(0, 0, 0, 0.025) 1px,
+      transparent 1px
+    ), radial-gradient(at 0% 0%, rgba(0, 0, 0, 0.02) 0%, transparent 60%),
+    radial-gradient(at 100% 100%, rgba(0, 0, 0, 0.015) 0%, transparent 60%);
+  background-size: 24px 24px, 100% 100%, 100% 100%;
+}

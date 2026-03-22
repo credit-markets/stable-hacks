@@ -1,0 +1,89 @@
+{
+  "address": "4azCqYgLHDRmsiR6kmYu6v5qvzamaYGqZcmx8MrnrKMc",
+  "metadata": {
+    "name": "mock_sas",
+    "version": "0.1.0",
+    "spec": "0.1.0"
+  },
+  "instructions": [
+    {
+      "name": "create_attestation",
+      "discriminator": [
+        49,
+        24,
+        67,
+        80,
+        12,
+        249,
+        96,
+        239
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "attestation",
+          "writable": true
+        },
+        {
+          "name": "subject"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "issuer",
+          "type": "pubkey"
+        },
+        {
+          "name": "attestation_type",
+          "type": "u8"
+        },
+        {
+          "name": "country_code",
+          "type": {
+            "array": [
+              "u8",
+              2
+            ]
+          }
+        },
+        {
+          "name": "expires_at",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "revoke_attestation",
+      "discriminator": [
+        12,
+        156,
+        103,
+        161,
+        194,
+        246,
+        211,
+        179
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "attestation",
+          "writable": true
+        }
+      ],
+      "args": []
+    }
+  ]
+}

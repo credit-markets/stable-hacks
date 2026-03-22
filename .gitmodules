@@ -1,12 +1,4 @@
-[submodule "app"]
-	path = app
-	url = git@github.com:credit-markets/app.git
-	branch = feature/phase5-admin-panel-redesign
-[submodule "backend"]
-	path = backend
-	url = git@github.com:credit-markets/backend-node.git
-	branch = feature/phase5-admin-panel-redesign
-[submodule "programs/svs-11"]
-	path = programs/svs-11
+[submodule "solana-vault-standard"]
+	path = solana-vault-standard
 	url = git@github.com:thomgabriel/solana-vault-standard.git
 	branch = feat/svs-11-credit-vault

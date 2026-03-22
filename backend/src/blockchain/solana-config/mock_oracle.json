@@ -1,0 +1,137 @@
+{
+  "address": "EbFcZZApkGcX6LqRmzSWVLasnDM457wY4WvhJRnVjdZF",
+  "metadata": {
+    "name": "mock_oracle",
+    "version": "0.1.0",
+    "spec": "0.1.0"
+  },
+  "instructions": [
+    {
+      "name": "set_price",
+      "discriminator": [
+        16,
+        19,
+        182,
+        8,
+        149,
+        83,
+        72,
+        181
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "oracle_data",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  114,
+                  97,
+                  99,
+                  108,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "price",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "update_timestamp",
+      "discriminator": [
+        80,
+        68,
+        198,
+        75,
+        117,
+        231,
+        159,
+        218
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "oracle_data",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  114,
+                  97,
+                  99,
+                  108,
+                  101
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "timestamp",
+          "type": "i64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "OracleData",
+      "discriminator": [
+        26,
+        131,
+        25,
+        110,
+        6,
+        141,
+        10,
+        37
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "OracleData",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "price_per_share",
+            "type": "u64"
+          },
+          {
+            "name": "updated_at",
+            "type": "i64"
+          }
+        ]
+      }
+    }
+  ]
+}
