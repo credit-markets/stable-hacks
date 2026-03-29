@@ -88,7 +88,7 @@ Investor (USDC)                    Manager                         Investor (Sha
 
 Every interaction validates the investor's on-chain KYC attestation (issuer, expiry, revocation status) — composable with any provider (Civic Pass, SAS, Sprout, or custom).
 
-> Full SVS-11 specification: [SVS-11.md](solana-vault-standard/docs/SVS-11.md)
+> Full SVS-11 specification: [SVS-11.md](https://github.com/thomgabriel/solana-vault-standard/blob/feat/svs-11-credit-vault/docs/SVS-11.md)
 
 ---
 
@@ -184,8 +184,8 @@ cd app && pnpm install && pnpm dev       # http://localhost:3000
 
 - [app/README.md](app/README.md) — Frontend architecture & setup
 - [backend/README.md](backend/README.md) — Backend architecture & setup
-- [solana-vault-standard/README.md](solana-vault-standard/README.md) — Solana Vault Standard family overview & quick start
-- [solana-vault-standard/docs/SVS-11.md](solana-vault-standard/docs/SVS-11.md) — SVS-11 credit vault specification
+- [solana-vault-standard/README.md](https://github.com/thomgabriel/solana-vault-standard/blob/feat/svs-11-credit-vault/README.md) — Solana Vault Standard family overview & quick start
+- [solana-vault-standard/docs/SVS-11.md](https://github.com/thomgabriel/solana-vault-standard/blob/feat/svs-11-credit-vault/docs/SVS-11.md) — SVS-11 credit vault specification
 
 ---
 
