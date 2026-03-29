@@ -8,11 +8,11 @@
 
 ## The Problem
 
-**Over $1 trillion in real-world credit assets across Latin America remain trapped by local friction.** Fragmented legal frameworks, currency conversion barriers, and no standardized infrastructure to connect local origination with global institutional capital.
+**Over $5.7 trillion in real-world credit assets across emerging markets remain trapped by local friction.** Fragmented legal frameworks, currency conversion barriers, and no standardized infrastructure to connect local origination with global institutional capital.
 
 SMEs overpay for working capital while global investors struggle to access reliable yield backed by real cash flows. The capital exists. The demand exists. The infrastructure does not.
 
-Brazil alone represents a $593B MSME credit gap — yet its receivables show institutional-grade performance (0.66% default rate) and its FIDC market ($240B, 24% YoY growth) proves the asset class works. High banking spreads reflect structural concentration, not credit risk, creating immediate value for infrastructure that improves efficiency.
+Brazil alone represents a $593B MSME credit gap — yet its receivables show institutional-grade performance (0.66% default rate) and its FIDC market ($170B AUM, 30% YoY growth) proves the asset class works. High banking spreads reflect structural concentration, not credit risk, creating immediate value for infrastructure that improves efficiency.
 
 The convergence is happening now: Brazil's CVM Resolution 88, CMN 4,373, and Law 14,430 create compliant pathways for tokenized credit. Latin America stablecoin volumes grew from $1B to $6B in 2024-2025. Regulation has evolved from uncertainty to clarity. Stablecoins function as reliable settlement rails. Tokenization has crossed from experimentation to operational reality.
 
