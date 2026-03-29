@@ -32,7 +32,7 @@ We built the full stack: an on-chain vault program (**SVS-11**), a platform for 
 - **Full-stack platform** — Manager dashboard, investor marketplace, portfolio tracking, admin panel (15 NestJS modules, 75+ React Query hooks)
 - **KYB/KYC verification** with on-chain attestation — composable with any KYC provider
 - **Proprietary risk model** — Ensemble ML pipeline scoring ~5,100 Brazilian FIDCs from CVM/BACEN regulatory filings (EFA + XGBoost + panel models, validated against fund returns)
-- **Compliance tooling** — Account freezing, vault pause, investment windows, full audit trail (16 on-chain event types)
+- **Compliance tooling** — Account freezing, vault pause, investment windows, full audit trail (23 on-chain event types)
 
 ### Pool Types
 
@@ -43,27 +43,27 @@ We built the full stack: an on-chain vault program (**SVS-11**), a platform for 
 
 ---
 
-## SVS-11: Bringing ERC-4626 to Solana for Institutional Credit
+## SVS-11: Bringing ERC-7540 to Solana for Institutional Credit
 
 We implemented **SVS-11** — a new variant of the [Solana Vault Standard](https://github.com/solanabr/solana-vault-standard), which is a standards-aligned architectural port of ERC-4626 adapted for Solana's account model.
 
-The SVS family (SVS-1 through SVS-12) covers the full spectrum from permissionless DeFi vaults to tranched structured products. **SVS-11 is purpose-built for institutional credit** — it extends the base standard with async approval flows, oracle-driven NAV, KYC enforcement, and compliance controls that ERC-4626 and existing SVS variants don't provide:
+The SVS family (SVS-1 through SVS-12) covers the full spectrum from permissionless DeFi vaults to tranched structured products. **SVS-11 is purpose-built for institutional credit** — it extends the base standard with async approval flows (ERC-7540), oracle-driven NAV, KYC enforcement, and compliance controls that ERC-4626 and existing SVS variants don't provide:
 
 |                 | SVS-1/2 (DeFi Vaults)          | SVS-11 (Credit Markets)                              |
 | --------------- | ------------------------------ | ---------------------------------------------------- |
-| **Deposit**     | Direct (1 TX)                  | Request → Approve → Claim (async, manager-gated)     |
-| **NAV Pricing** | Vault balance (ERC-4626 style) | Oracle price-per-share (dynamic yield realization)   |
+| **Deposit**     | Direct (1 TX)                  | Request → Approve → Claim (ERC-7540 async, manager-gated) |
+| **NAV Pricing** | Vault balance (ERC-4626 style) | Oracle price-per-share (dynamic yield realization)         |
 | **KYC**         | None                           | Built-in attestation — validated on every TX         |
 | **Compliance**  | N/A                            | Per-investor freeze, vault pause, investment windows |
 | **Capital**     | Vault-only                     | Manager draw_down / repay (real-world lending model) |
 | **Roles**       | Authority                      | Authority + Manager + Attester + Investor            |
 
-### 21 On-Chain Instructions
+### 23 On-Chain Instructions
 
 ```
 Pool:        initialize_pool · open/close_investment_window · pause · unpause
 Invest:      request_deposit → approve_deposit → claim_deposit | reject | cancel
-Redeem:      request_redeem → approve_redeem → claim_redeem | cancel
+Redeem:      request_redeem → approve_redeem → claim_redeem | reject | cancel
 Capital:     draw_down · repay
 Compliance:  freeze_account · unfreeze_account
 Governance:  transfer_authority · set_manager · update_attester · update_oracle_config
@@ -88,7 +88,7 @@ Investor (USDC)                    Manager                         Investor (Sha
 
 Every interaction validates the investor's on-chain KYC attestation (issuer, expiry, revocation status) — composable with any provider (Civic Pass, SAS, Sprout, or custom).
 
-> Full SVS-11 specification: [SVS-11.md](SVS-11.md)
+> Full SVS-11 specification: [SVS-11.md](solana-vault-standard/docs/SVS-11.md)
 
 ---
 
